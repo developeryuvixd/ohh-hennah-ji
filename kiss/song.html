@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Heavenly 💗</title>
+
+<style>
+body{
+    margin:0;
+    padding:0;
+    height:100vh;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    background: radial-gradient(circle at center, #1a001a, #000000);
+    font-family:'Segoe UI',sans-serif;
+    color:white;
+}
+
+/* 🌸 Floating Valentines */
+.floating{
+    position:absolute;
+    font-size:22px;
+    animation: floatUp linear infinite;
+    opacity:0.8;
+}
+
+@keyframes floatUp{
+    from{
+        transform:translateY(100vh) scale(1);
+        opacity:0.8;
+    }
+    to{
+        transform:translateY(-10vh) scale(1.3);
+        opacity:0;
+    }
+}
+
+/* 💫 Soft Glow */
+body::before{
+    content:"";
+    position:absolute;
+    width:700px;
+    height:700px;
+    background:radial-gradient(circle,#ff4da6 0%, transparent 70%);
+    filter:blur(130px);
+    opacity:0.3;
+    animation:pulse 6s infinite alternate ease-in-out;
+}
+
+@keyframes pulse{
+    from{ transform:scale(1); opacity:0.25;}
+    to{ transform:scale(1.2); opacity:0.4;}
+}
+
+/* 🎵 Text Styling */
+.topText{
+    margin-bottom:15px;
+    font-size:1.4rem;
+    z-index:2;
+    opacity:0;
+    animation:fadeIn 2s forwards;
+}
+
+.bottomText{
+    margin-top:15px;
+    font-size:1.2rem;
+    z-index:2;
+    opacity:0;
+    animation:fadeIn 2s forwards 1s;
+}
+
+@keyframes fadeIn{
+    to{ opacity:1; }
+}
+
+/* Spotify */
+.player{
+    z-index:2;
+}
+
+/* 💌 Letter */
+#letter{
+    margin-top:40px;
+    max-width:700px;
+    text-align:center;
+    font-size:1.1rem;
+    line-height:1.6;
+    opacity:0;
+    transition:2s ease;
+    z-index:2;
+}
+
+.showLetter{
+    opacity:1 !important;
+}
+</style>
+</head>
+
+<body>
+
+<!-- 💞 Floating Elements Container -->
+<div id="floatContainer"></div>
+
+<div class="topText">
+    This song reminds me of you today&lt;3
+</div>
+
+<div class="player">
+    <iframe style="border-radius:12px"
+        src="https://open.spotify.com/embed/track/5E02BgqYNN9VzafXrYP6Np?utm_source=generator"
+        width="400"
+        height="152"
+        frameBorder="0"
+        allowfullscreen=""
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
+    </iframe>
+</div>
+
+<div class="bottomText">
+    I lobb uuu so muchh darling
+</div>
+
+<div id="letter">
+    I am sorry , I couldn't make an extra creative website for you.
+    I made this before my English Exam because I did not make a website for Kiss Day back then.
+    I hope You liked this small and simple website.
+    I love you.
+</div>
+
+<script>
+
+// 💌 Letter after 7 seconds
+setTimeout(()=>{
+    document.getElementById("letter").classList.add("showLetter");
+},7000);
+
+
+// 💞 Floating Valentine's Things Generator
+const symbols = ["💗","💖","💘","💝","🌹","💞","✨"];
+const container = document.getElementById("floatContainer");
+
+function createFloating(){
+    const span = document.createElement("span");
+    span.className = "floating";
+    span.innerHTML = symbols[Math.floor(Math.random()*symbols.length)];
+    span.style.left = Math.random()*100 + "vw";
+    span.style.animationDuration = (6 + Math.random()*6) + "s";
+    span.style.fontSize = (18 + Math.random()*20) + "px";
+    container.appendChild(span);
+
+    setTimeout(()=>{ span.remove(); },12000);
+}
+
+setInterval(createFloating,400);
+
+</script>
+
+</body>
+</html>

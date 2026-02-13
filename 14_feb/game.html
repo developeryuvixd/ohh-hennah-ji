@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine's Interactive Game 💖</title>
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to bottom, #ffb6c1, #ff69b4, #ff1493);
+    color: white;
+    text-align: center;
+    overflow-x: hidden;
+}
+
+h1,h2 {
+    text-shadow: 2px 2px 15px #ff69b4;
+    margin: 20px 0;
+}
+
+.question-box {
+    background: rgba(255,255,255,0.1);
+    margin: 20px auto;
+    padding: 20px;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 20px;
+    box-shadow: 0 0 30px #ff69b4;
+}
+
+.option-btn {
+    padding: 12px 25px;
+    margin: 10px;
+    font-size: 1em;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+    background: linear-gradient(45deg, #ff7eb9, #ff65a3);
+    color: white;
+    box-shadow: 0 0 15px #ff69b4, 0 0 30px #ff1493;
+    position: relative;
+}
+
+.option-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 25px #00ff7c, 0 0 50px #00ff7c;
+}
+
+.match-text {
+    display: block;
+    margin-top: 8px;
+    font-weight: bold;
+    color: #00ff7c;
+    text-shadow: 1px 1px 8px #00ff7c;
+}
+
+.sookie-text {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.9em;
+    color: #ffe0e0;
+    text-shadow: 1px 1px 6px #ffb6b6;
+}
+
+#nextBtn {
+    display: none;
+    margin-top: 30px;
+    padding: 15px 35px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    background: linear-gradient(45deg, #ff7eb9, #ff65a3);
+    color: white;
+    box-shadow: 0 0 20px #ff69b4, 0 0 40px #ff1493;
+    transition: 0.3s;
+}
+
+#nextBtn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 35px #00ff7c, 0 0 70px #00ff7c;
+}
+
+#finalResult {
+    display: none;
+    padding: 50px;
+}
+
+#finalResult h2 {
+    margin-bottom: 20px;
+}
+
+/* Floating hearts */
+.heart {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: red;
+    transform: rotate(45deg);
+    animation: float 6s infinite;
+}
+.heart:before,
+.heart:after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: red;
+    border-radius: 50%;
+}
+.heart:before { top: -10px; left: 0; }
+.heart:after { left: 10px; top: 0; }
+@keyframes float {
+    0% {transform: translateY(0) rotate(45deg);}
+    50% {transform: translateY(-200px) rotate(45deg);}
+    100% {transform: translateY(0) rotate(45deg);}
+}
+</style>
+</head>
+<body>
+
+<h1>💖 Valentine’s Interactive Game 💖</h1>
+<h2>Click your choice and see Sookie’s answer!</h2>
+
+<div id="quizContainer"></div>
+<button id="nextBtn">Next Game ➡️</button>
+<div id="finalResult"></div>
+
+<script>
+// --- Floating hearts ---
+for (let i = 0; i < 40; i++) {
+    let heart = document.createElement('div');
+    heart.className = 'heart';
+    heart.style.left = Math.random()*window.innerWidth+'px';
+    heart.style.animationDuration = (4+Math.random()*3)+'s';
+    heart.style.width=heart.style.height=(10+Math.random()*20)+'px';
+    document.body.appendChild(heart);
+}
+
+// --- 5 sets of questions ---
+const questionSets = [
+    [ // Set 1
+        {q:"How do you like to spend a cozy evening together?", opts:["Watching movies & cuddling","Cooking or baking together","Talking about dreams and plans","Listening to music & relaxing"], myAnswer:"A"},
+        {q:"Which little surprise makes you happiest?", opts:["A handwritten love note","A bouquet of flowers","A small gift or treat","A spontaneous adventure"], myAnswer:"A"},
+        {q:"How would you spend a perfect weekend together?", opts:["Picnic in the park","Exploring a new city","Reading or sharing stories at home","Watching the sunset together"], myAnswer:"D"},
+        {q:"Your favorite way to express love?", opts:["Saying “I love you” often","Little acts of kindness","Sharing memories and inside jokes","Holding hands or hugs"], myAnswer:"C"},
+        {q:"What would you like to do on Valentine’s Day?", opts:["Romantic dinner","Surprise gifts & letters","Fun games or activities together","Quiet, cozy time at home"], myAnswer:"B"},
+        {q:"How do you imagine future trips together?", opts:["Beach and sunsets","Mountains and hiking","Cities and adventures","Calm countryside escapes"], myAnswer:"B"},
+        {q:"What’s your favorite shared memory?", opts:["Laughing until we cried","Talking late at night","Helping each other in small ways","Any quiet, simple moment together"], myAnswer:"C"},
+        {q:"How do you feel when we talk about dreams?", opts:["Inspired and excited","Safe and loved","Curious and playful","Calm and connected"], myAnswer:"B"},
+        {q:"Which small gesture matters most?", opts:["Good morning texts","Sweet compliments","Thoughtful surprises","Just being there"], myAnswer:"D"},
+        {q:"What’s your favorite way to spend “together time”?", opts:["Cozying up at home","Trying something new","Laughing over silly things","Sharing music, books, or art"], myAnswer:"B"}
+    ],
+    [ // Set 2
+        {q:"What’s your favorite way to start the day together?", opts:["Morning coffee together","A short walk","Sending a sweet text","Lazy cuddles in bed"], myAnswer:"C"},
+        {q:"If we could adopt a pet together, what would it be?", opts:["A dog","A cat","A bird","A small exotic pet"], myAnswer:"B"},
+        {q:"Which activity is most fun for a date?", opts:["Movie night","Cooking together","Board games","Going for a drive"], myAnswer:"D"},
+        {q:"Your favorite romantic movie genre?", opts:["Comedy","Drama","Adventure","Animation"], myAnswer:"B"},
+        {q:"Which snack would you love sharing?", opts:["Chocolate","Ice cream","Cookies","Fruit"], myAnswer:"B"},
+        {q:"How do you like celebrating small victories together?", opts:["Little gifts","Special dinner","Fun activity together","Just hugs and smiles"], myAnswer:"C"},
+        {q:"What’s your dream vacation?", opts:["Beach resort","Mountain cabin","City exploration","Countryside escape"], myAnswer:"B"},
+        {q:"How do you feel about surprises?", opts:["Love them","Depends on the surprise","Prefer planned","Anything fun is fine"], myAnswer:"A"},
+        {q:"How do you like spending rainy days together?", opts:["Watching movies","Reading together","Cooking/baking","Just talking and relaxing"], myAnswer:"D"},
+        {q:"What’s your favorite music vibe together?", opts:["Romantic ballads","Upbeat pop","Chill acoustic","Any fun songs"], myAnswer:"A"}
+    ],
+    [ // Set 3
+        {q:"Favorite color you like seeing on me?", opts:["Red","Pink","Purple","White"], myAnswer:"A"},
+        {q:"Favorite flower you think of when you see me?", opts:["Rose","Lily","Tulip","Daisy"], myAnswer:"C"},
+        {q:"Favorite season we spend together?", opts:["Spring","Summer","Autumn","Winter"], myAnswer:"C"},
+        {q:"Favorite thing to do on weekends?", opts:["Go for a walk","Watch movies","Cook together","Read or relax"], myAnswer:"A"},
+        {q:"Favorite type of date?", opts:["Romantic dinner","Movie night","Picnic","Adventure outing"], myAnswer:"A"},
+        {q:"Favorite kind of music together?", opts:["Love songs","Pop hits","Jazz/Chill","Any upbeat music"], myAnswer:"A"},
+        {q:"Favorite dessert to share?", opts:["Chocolate cake","Ice cream","Cookies","Fruit tart"], myAnswer:"B"},
+        {q:"Favorite way to surprise each other?", opts:["Small gifts","Notes or messages","Spontaneous plans","Acts of kindness"], myAnswer:"A"},
+        {q:"Favorite movie genre?", opts:["Romance","Comedy","Adventure","Fantasy"], myAnswer:"D"},
+        {q:"Favorite way to spend quiet evenings together?", opts:["Listening to music","Talking about dreams","Watching the sunset","Just cuddling"], myAnswer:"C"}
+    ],
+    [ // Set 4
+        {q:"If we could travel anywhere together right now, where would you choose?", opts:["Tropical island","Snowy mountains","A bustling city","Countryside retreat"], myAnswer:"B"},
+        {q:"If we were characters in a story, which would you be?", opts:["Adventurers","Dreamers","Comedians","Artists"], myAnswer:"B"},
+        {q:"Favorite way to celebrate our little milestones?", opts:["Special dinner","Small gifts","Fun activity or game","Just a quiet moment together"], myAnswer:"C"},
+        {q:"If we had a secret hideout, it would be…", opts:["A cozy cabin","A beach hut","A treehouse","A rooftop terrace"], myAnswer:"C"},
+        {q:"Your ideal surprise from me?", opts:["A handwritten note","Flowers or gifts","A spontaneous date","A song or playlist"], myAnswer:"A"},
+        {q:"Most fun thing to do together on a lazy Sunday?", opts:["Binge-watch a show","Cook a meal together","Play games","Go for a walk"], myAnswer:"D"},
+        {q:"If we had a shared hobby, it would be…", opts:["Painting or art","Music or singing","Sports or adventure","Reading or writing"], myAnswer:"A"},
+        {q:"What type of gift makes you happiest?", opts:["Personalized keepsakes","Cute surprises","Practical items","Something edible/tasty"], myAnswer:"B"},
+        {q:"Favorite way to spend a festival or celebration together?", opts:["Romantic dinner","Dancing and fun","Traveling somewhere special","Quiet cozy evening"], myAnswer:"C"},
+        {q:"How would you describe our bond in one word?", opts:["Magical","Playful","Strong","Dreamy"], myAnswer:"D"}
+    ],
+    [ // Set 5
+        {q:"If we could create our own holiday, what would it be?", opts:["A day for surprises","A day for love letters","A day for adventures","A day for cozy time"], myAnswer:"C"},
+        {q:"Which dream home feature would you love most?", opts:["A giant library","A beautiful garden","A home theater","A rooftop terrace"], myAnswer:"A"},
+        {q:"Favorite way to spend a starry night together?", opts:["Stargazing on a hill","Sitting by the beach","Watching the city lights","Cozying up indoors"], myAnswer:"A"},
+        {q:"Which kind of adventure would you love together?", opts:["Road trips","Hiking in nature","Exploring new cities","Trying extreme sports"], myAnswer:"A"},
+        {q:"Favorite way to start a surprise for me?", opts:["Leaving a note","Cooking my favorite food","Playing a song I like","Planning a spontaneous outing"], myAnswer:"A"},
+        {q:"What’s the most romantic gesture you can imagine?", opts:["Handwritten letters","Surprise gifts","Slow dancing","Thoughtful small acts"], myAnswer:"D"},
+        {q:"Favorite shared activity on a rainy day?", opts:["Baking together","Watching movies","Playing board games","Talking and laughing"], myAnswer:"D"},
+        {q:"How do you picture our future together?", opts:["Traveling the world","Cozy home life","Creative projects together","Just enjoying each other’s company"], myAnswer:"A"},
+        {q:"Most fun memory to recreate together?", opts:["First date","A favorite trip","A silly adventure","A cozy night in"], myAnswer:"B"},
+        {q:"If we wrote a song together, the theme would be…", opts:["Love & magic","Fun & laughter","Dreams & adventures","Cozy, heartfelt moments"], myAnswer:"D"}
+    ]
+];
+
+let currentSet = 0;
+let userAnswers = [];
+let totalMatches = 0;
+let totalMismatches = 0;
+
+// --- Display current quiz set ---
+function displayQuiz() {
+    const container = document.getElementById("quizContainer");
+    container.innerHTML = "";
+    userAnswers = new Array(questionSets[currentSet].length).fill(null);
+
+    questionSets[currentSet].forEach((qObj, index)=>{
+        let qBox = document.createElement("div");
+        qBox.className = "question-box";
+
+        let qTitle = document.createElement("h3");
+        qTitle.textContent = `Q${index+1}: ${qObj.q}`;
+        qBox.appendChild(qTitle);
+
+        qObj.opts.forEach((opt, i)=>{
+            let btn = document.createElement("button");
+            btn.className = "option-btn";
+            btn.textContent = opt;
+
+            btn.onclick = () => {
+                // Only allow one click
+                if(userAnswers[index]) return;
+
+                userAnswers[index] = String.fromCharCode(65+i); // A/B/C/D
+
+                // Show Sookie’s choice
+                let sText = document.createElement("span");
+                sText.className="sookie-text";
+                sText.textContent = `Sookie chose: ${qObj.myAnswer}`;
+                btn.appendChild(sText);
+
+                // Check for match
+                if(userAnswers[index] === qObj.myAnswer){
+                    btn.style.border = "3px solid #00ff7c";
+                    let match = document.createElement("span");
+                    match.className="match-text";
+                    match.textContent = "Matching!";
+                    btn.appendChild(match);
+                    totalMatches++;
+                } else {
+                    totalMismatches++;
+                }
+
+                // Show next button if all answered
+                if(userAnswers.every(ans => ans !== null)){
+                    nextBtn.style.display="inline-block";
+                }
+            }
+
+            qBox.appendChild(btn);
+        });
+
+        container.appendChild(qBox);
+    });
+}
+
+displayQuiz();
+
+// --- Next Game Button ---
+const nextBtn = document.getElementById("nextBtn");
+nextBtn.onclick = () => {
+    currentSet++;
+    if(currentSet >= questionSets.length){
+        // Show final result
+        document.getElementById("quizContainer").style.display="none";
+        nextBtn.style.display="none";
+        const finalDiv = document.getElementById("finalResult");
+        finalDiv.innerHTML = `<h2>💖 All Sets Completed! 💖</h2>
+            <p>Total Matched Options: ${totalMatches}</p>
+            <p>Total Unmatched Options: ${totalMismatches}</p>`;
+        finalDiv.style.display="block";
+        return;
+    }
+    displayQuiz();
+    nextBtn.style.display="none";
+}
+
+</script>
+</body>
+</html>

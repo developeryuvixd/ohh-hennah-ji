@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chocolate Day Song 🎵</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: linear-gradient(to bottom, #ffe4e1, #d2691e);
+        text-align: center;
+        flex-direction: column;
+    }
+
+    h1 {
+        font-size: 2rem;
+        color: #5c3317;
+        margin-bottom: 30px;
+    }
+
+    iframe {
+        border: none;
+        width: 300px;
+        height: 80px;
+        margin-bottom: 20px;
+    }
+
+    button {
+        display: none; /* hidden initially */
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 1rem;
+        background: #8b4513;
+        color: #fff8dc;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #5c3317;
+    }
+</style>
+</head>
+<body>
+
+<h1>This song reminds me of you today 🎵</h1>
+
+<!-- Spotify embed player -->
+<iframe src="https://open.spotify.com/embed/track/3QaPy1KgI7nu9FJEQUgn6h?utm_source=generator" 
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+        allowfullscreen></iframe>
+
+<!-- Button to jump to Page 3 -->
+<button id="goPage3Btn">Go to Next Surprise 🎉</button>
+
+<script>
+const goBtn = document.getElementById('goPage3Btn');
+
+// Show button after 7 seconds
+setTimeout(() => {
+    goBtn.style.display = 'inline-block';
+}, 7000);
+
+// Button opens Page 3
+goBtn.addEventListener('click', () => {
+    window.location.href = 'telepathy.html'; // Page 3
+});
+</script>
+
+</body>
+</html>

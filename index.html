@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine Control Panel 💖</title>
+
+<style>
+body{
+    margin:0;
+    font-family:'Segoe UI',sans-serif;
+    background:black;
+    color:white;
+    overflow-x:hidden;
+}
+
+/* DRAMATIC ROTATING BACKGROUND */
+body::before{
+    content:"";
+    position:fixed;
+    width:200%;
+    height:200%;
+    background: radial-gradient(circle at center, #ff0055 0%, #000 70%);
+    animation: rotateBG 20s linear infinite;
+    z-index:-2;
+}
+@keyframes rotateBG{
+    from{ transform:rotate(0deg);}
+    to{ transform:rotate(360deg);}
+}
+
+/* HEARTS */
+.heart{
+    position:absolute;
+    color:#ff2e6e;
+    font-size:20px;
+    animation: floatUp linear infinite;
+    z-index:-1;
+}
+@keyframes floatUp{
+    from{ transform:translateY(100vh); opacity:1;}
+    to{ transform:translateY(-10vh); opacity:0;}
+}
+
+/* PARTICLES */
+.particle{
+    position:absolute;
+    width:3px;
+    height:3px;
+    background:white;
+    border-radius:50%;
+    animation: sparkle 5s infinite;
+    z-index:-1;
+}
+@keyframes sparkle{
+    0%,100%{opacity:0;}
+    50%{opacity:1;}
+}
+
+/* LOGIN */
+#loginScreen{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:black;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    z-index:999;
+}
+#loginScreen input{
+    padding:10px;
+    margin:10px;
+    border:none;
+    border-radius:8px;
+}
+#loginScreen button{
+    padding:10px 20px;
+    background:#ff0055;
+    border:none;
+    color:white;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+/* SIDEBAR */
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    height:100%;
+    width:60px;
+    background:rgba(0,0,0,0.7);
+    backdrop-filter:blur(10px);
+    transition:0.4s;
+    overflow:hidden;
+    z-index:10;
+}
+.sidebar.active{ width:280px; }
+.dots{
+    font-size:28px;
+    padding:15px;
+    cursor:pointer;
+}
+.menu{
+    display:flex;
+    flex-direction:column;
+}
+.menu a{
+    text-decoration:none;
+    color:white;
+    padding:15px;
+    transition:0.3s;
+    cursor:pointer;
+}
+.menu a:hover{
+    background:rgba(255,0,80,0.4);
+    padding-left:25px;
+}
+
+/* CONTENT */
+.content{
+    margin-left:80px;
+    padding:40px;
+}
+
+/* SONG GRID */
+.song-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:25px;
+}
+.song-card{
+    background:rgba(255,255,255,0.05);
+    padding:15px;
+    border-radius:15px;
+    backdrop-filter:blur(10px);
+    box-shadow:0 0 20px rgba(255,0,80,0.3);
+}
+.song-card h3{
+    margin:0 0 10px 0;
+    color:#ff2e6e;
+}
+
+.glow-text{
+    text-align:center;
+    font-size:30px;
+    color:#ff0055;
+    text-shadow:0 0 15px #ff0055,0 0 30px #ff0055;
+    animation: glow 2s infinite alternate;
+}
+@keyframes glow{
+    from{opacity:0.7;}
+    to{opacity:1;}
+}
+
+/* QUESTION GAME MODAL */
+#gameModal{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.9);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    text-align:center;
+    padding:20px;
+    z-index:1000;
+}
+#gameModal button{
+    margin-top:20px;
+    padding:12px 25px;
+    background:#ff0055;
+    border:none;
+    color:white;
+    border-radius:8px;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+    <h2>Private Valentine Access 💌</h2>
+    <input type="password" id="password" placeholder="Enter our secret password">
+    <button onclick="checkPassword()">Enter</button>
+</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+    <div class="dots" onclick="toggleMenu()">⋮</div>
+    <div class="menu">
+        <a href="rose_propose_1/index.html">Rose & Propose Day I</a>
+        <a href="rose_propose_2/index.html">Rose & Propose Day II</a>
+        <a href="chocolate/index.html">Chocolate Day</a>
+        <a href="teddy/index.html">Teddy Day</a>
+        <a href="promise/index.html">Promise Day</a>
+        <a href="hug/index.html">Hug Day</a>
+        <a href="kiss/index.html">Kiss Day</a>
+        <a onclick="startGame()">Question Game</a>
+        <a href="gallery/index.html">Gallery</a>
+    </div>
+</div>
+
+<!-- GAME MODAL -->
+<div id="gameModal">
+    <h2 id="gameText">Preparing your questions.....</h2>
+</div>
+
+<div class="content">
+
+<h1>Valentine Dashboard 2026 💘</h1>
+<h2>Song that reminds me you on passing each day<3 💞</h2>
+
+<div class="song-grid">
+
+<div class="song-card">
+<h3>Rose Day - February 7</h3>
+<iframe src="https://open.spotify.com/embed/track/5qEn8c0MBzyRKgQq91Vevi" width="100%" height="80"></iframe>
+</div>
+
+<div class="song-card">
+<h3>Propose Day - February 8</h3>
+<iframe src="https://open.spotify.com/embed/track/7D0RhFcb3CrfPuTJ0obrod" width="100%" height="80"></iframe>
+</div>
+
+<div class="song-card">
+<h3>Chocolate Day - February 9</h3>
+<iframe src="https://open.spotify.com/embed/track/3QaPy1KgI7nu9FJEQUgn6h" width="100%" height="80"></iframe>
+</div>
+
+<div class="song-card">
+<h3>Teddy Day - February 10</h3>
+<iframe src="https://open.spotify.com/embed/track/2DGa7iaidT5s0qnINlwMjJ" width="100%" height="80"></iframe>
+</div>
+
+<div class="song-card">
+<h3>Promise Day - February 11</h3>
+<iframe src="https://open.spotify.com/embed/track/2262bWmqomIaJXwCRHr13j" width="100%" height="80"></iframe>
+</div>
+
+<div class="song-card">
+<h3>Hug Day - February 12</h3>
+<iframe src="https://open.spotify.com/embed/track/1LzNfuep1bnAUR9skqdHCK" width="100%" height="80"></iframe>
+</div>
+
+<div class="song-card">
+<h3>Kiss Day - February 13</h3>
+<iframe src="https://open.spotify.com/embed/track/5E02BgqYNN9VzafXrYP6Np" width="100%" height="80"></iframe>
+</div>
+
+</div>
+
+<br><br>
+
+<div class="glow-text">
+This song reminds me of you today &lt;3 <br>
+I lobb youu so muchh Darlingggg &lt;3333
+</div>
+
+<br>
+
+<iframe src="https://open.spotify.com/embed/track/6cx5CvFhqN19efStehJqoW" width="100%" height="200"></iframe>
+
+</div>
+
+<script>
+function checkPassword(){
+    let pass = document.getElementById("password").value;
+    if(pass === "333"){
+        document.getElementById("loginScreen").style.display="none";
+    } else {
+        alert("Wrong password 😈");
+    }
+}
+function toggleMenu(){
+    document.getElementById("sidebar").classList.toggle("active");
+}
+
+/* QUESTION GAME FLOW */
+function startGame(){
+    let modal=document.getElementById("gameModal");
+    let text=document.getElementById("gameText");
+    modal.style.display="flex";
+    text.innerHTML="Preparing your questions.....";
+
+    setTimeout(()=>{
+        text.innerHTML="There are 5 sets of 10 questions. I have already answered them.<br>Now you can answer those questions to see the compatibility &lt;3";
+        
+        let btn=document.createElement("button");
+        btn.innerText="Jump into it";
+        btn.onclick=function(){
+            window.location.href="14_feb/index.html";
+        };
+        modal.appendChild(btn);
+    },3000);
+}
+
+/* HEARTS */
+setInterval(()=>{
+    let heart=document.createElement("div");
+    heart.className="heart";
+    heart.innerHTML="❤";
+    heart.style.left=Math.random()*100+"vw";
+    heart.style.animationDuration=(3+Math.random()*5)+"s";
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),8000);
+},500);
+
+/* PARTICLES */
+for(let i=0;i<50;i++){
+    let p=document.createElement("div");
+    p.className="particle";
+    p.style.left=Math.random()*100+"vw";
+    p.style.top=Math.random()*100+"vh";
+    p.style.animationDelay=Math.random()*5+"s";
+    document.body.appendChild(p);
+}
+</script>
+
+</body>
+</html>

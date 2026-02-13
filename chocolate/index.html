@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chocolate Catcher 🍫</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(to bottom, #f7e1c6, #d2691e);
+        transition: background 1s;
+    }
+
+    #gameContainer {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    #basket {
+        position: absolute;
+        bottom: 10px;
+        width: 80px;
+        height: 50px;
+        background: #8b4513;
+        border-radius: 15px 15px 0 0;
+        left: 50%;
+        transform: translateX(-50%);
+        touch-action: none;
+    }
+
+    .chocolate {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        background: #5c3317;
+        border-radius: 10px;
+    }
+
+    #scoreBoard {
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 1.5rem;
+        color: #fff;
+        text-shadow: 1px 1px #8b4513;
+    }
+
+    #finalMessage, #chocolateBtnDiv, #clickSongDiv {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #fff8dc;
+        color: #5c3317;
+        padding: 20px 30px;
+        border-radius: 15px;
+        text-align: center;
+        font-size: 1.5rem;
+        box-shadow: 0 0 15px #8b4513;
+        max-width: 90%;
+    }
+
+    #bigChocolate {
+        width: 150px;
+        height: 150px;
+        background: #5c3317;
+        border-radius: 20px;
+        margin: 20px auto;
+        display: none;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 1rem;
+        background: #8b4513;
+        color: #fff8dc;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        margin-top: 15px;
+    }
+
+    button:hover { background: #5c3317; }
+
+</style>
+</head>
+<body>
+
+<audio id="bgMusic" src="soft-music.mp3" loop></audio>
+
+<div id="gameContainer">
+    <div id="scoreBoard">Score: 0</div>
+    <div id="basket"></div>
+
+    <!-- Final message after 10 chocolates -->
+    <div id="finalMessage">Happyy chocolate day my darling, my sweetheart, sweetie pie, hennah ji 🍫💖</div>
+
+    <!-- Take a chocolate button -->
+    <div id="chocolateBtnDiv">
+        <button id="takeChocolateBtn">Take a chocolate 🍫</button>
+        <div id="bigChocolate"></div>
+    </div>
+
+    <!-- Click here button to go to song -->
+    <div id="clickSongDiv">
+        <button id="openSongBtn">Click here</button>
+        <p>This song reminds me of you today 🎵</p>
+    </div>
+</div>
+
+<script>
+const gameContainer = document.getElementById('gameContainer');
+const basket = document.getElementById('basket');
+const scoreBoard = document.getElementById('scoreBoard');
+const finalMessage = document.getElementById('finalMessage');
+const chocolateBtnDiv = document.getElementById('chocolateBtnDiv');
+const takeChocolateBtn = document.getElementById('takeChocolateBtn');
+const bigChocolate = document.getElementById('bigChocolate');
+const clickSongDiv = document.getElementById('clickSongDiv');
+
+let basketX = gameContainer.offsetWidth / 2 - basket.offsetWidth / 2;
+let score = 0;
+let chocolatesCaught = 0;
+const totalChocolates = 10;
+
+// Play soft music
+const bgMusic = document.getElementById('bgMusic');
+bgMusic.play().catch(()=>{
+    gameContainer.addEventListener('touchstart', ()=>bgMusic.play(), {once:true});
+});
+
+// Basket movement
+gameContainer.addEventListener('touchstart', e => moveBasket(e.touches[0].clientX));
+gameContainer.addEventListener('touchmove', e => moveBasket(e.touches[0].clientX));
+document.addEventListener('keydown', e => {
+    if(e.key==='ArrowLeft') basketX-=20;
+    if(e.key==='ArrowRight') basketX+=20;
+    updateBasket();
+});
+
+function moveBasket(x){
+    basketX = x - basket.offsetWidth/2;
+    updateBasket();
+}
+function updateBasket(){
+    if(basketX<0) basketX=0;
+    if(basketX>gameContainer.offsetWidth-basket.offsetWidth) basketX = gameContainer.offsetWidth-basket.offsetWidth;
+    basket.style.left = basketX+'px';
+}
+
+// Create chocolates
+function createChocolate(){
+    const chocolate = document.createElement('div');
+    chocolate.classList.add('chocolate');
+    chocolate.style.left = Math.random()*(gameContainer.offsetWidth-40)+'px';
+    chocolate.style.top='-40px';
+    gameContainer.appendChild(chocolate);
+
+    const fallInterval = setInterval(()=>{
+        const chocolateTop = parseFloat(chocolate.style.top);
+        chocolate.style.top = chocolateTop + 3 + 'px';
+
+        const basketRect = basket.getBoundingClientRect();
+        const chocoRect = chocolate.getBoundingClientRect();
+
+        if(chocoRect.bottom>=basketRect.top &&
+           chocoRect.left + chocoRect.width >= basketRect.left &&
+           chocoRect.left <= basketRect.right){
+            score++;
+            chocolatesCaught++;
+            scoreBoard.textContent = `Score: ${score}`;
+            chocolate.remove();
+            clearInterval(fallInterval);
+            showMessage("You caught a sweet chocolate! 🍫");
+            if(chocolatesCaught>=totalChocolates) showFinalMessage();
+        }
+
+        if(chocoRect.top>gameContainer.offsetHeight){
+            chocolate.remove();
+            clearInterval(fallInterval);
+        }
+    },20);
+}
+
+// Pop-up message
+function showMessage(msg){
+    const msgDiv = document.createElement('div');
+    msgDiv.textContent = msg;
+    msgDiv.style.position='absolute';
+    msgDiv.style.top='20%';
+    msgDiv.style.left='50%';
+    msgDiv.style.transform='translateX(-50%)';
+    msgDiv.style.background='#fff8dc';
+    msgDiv.style.color='#5c3317';
+    msgDiv.style.padding='10px 20px';
+    msgDiv.style.borderRadius='10px';
+    msgDiv.style.boxShadow='0 0 10px #8b4513';
+    gameContainer.appendChild(msgDiv);
+    setTimeout(()=>msgDiv.remove(),1500);
+}
+
+// Show final message and chocolate button
+function showFinalMessage(){
+    document.body.style.background='linear-gradient(to bottom, #ffe4e1, #d2691e)';
+    basket.style.display='none';
+    finalMessage.style.display='block';
+    // Keep message visible for 5 seconds
+    setTimeout(()=>{
+        finalMessage.style.display='none';
+        chocolateBtnDiv.style.display='block';
+    },5000); // <-- was 2.5s, now 5s
+}
+
+// Take chocolate button
+takeChocolateBtn.addEventListener('click', ()=>{
+    bigChocolate.style.display='block';
+    // Show click here button after 5 seconds instead of 12
+    setTimeout(()=>{
+        chocolateBtnDiv.style.display='none';
+        clickSongDiv.style.display='block';
+    },5000); // <-- changed from 12s to 5s
+});
+
+// Open song button (Page 2)
+const openSongBtn = document.getElementById('openSongBtn');
+openSongBtn.addEventListener('click', ()=>{
+    window.open('song.html','_blank'); // opens Page 2
+    clickSongDiv.style.display='none';
+});
+
+setInterval(createChocolate,1000);
+</script>
+</body>
+</html>

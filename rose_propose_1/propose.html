@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Will You Be Mine? 💍</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<style>
+body{
+    margin:0;
+    overflow:hidden;
+    font-family:'Segoe UI',sans-serif;
+    background:radial-gradient(circle at center,#1a001f,#000);
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+/* Floating Hearts */
+.heart{
+    position:absolute;
+    color:#ff4da6;
+    animation:float 8s linear infinite;
+    opacity:0.7;
+}
+
+@keyframes float{
+    from{transform:translateY(100vh) scale(0.5);}
+    to{transform:translateY(-10vh) scale(1.2);}
+}
+
+/* Card */
+#card{
+    text-align:center;
+    padding:40px;
+    border-radius:20px;
+    background:rgba(255,255,255,0.05);
+    backdrop-filter:blur(15px);
+    width:90%;
+    max-width:500px;
+    box-shadow:0 0 40px rgba(255,0,128,0.3);
+}
+
+h1{
+    font-size:1.8rem;
+    margin-bottom:25px;
+}
+
+button{
+    padding:12px 22px;
+    margin:10px;
+    border:none;
+    border-radius:30px;
+    background:#ff4da6;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    transform:scale(1.1);
+    box-shadow:0 0 15px #ff4da6;
+}
+
+#proposalText{
+    font-size:2rem;
+    margin-top:20px;
+    opacity:0;
+}
+
+#yesBtn{
+    opacity:0;
+}
+
+#nextBtn{
+    margin-top:25px;
+    background:#ff1493;
+    opacity:0;
+}
+</style>
+</head>
+
+<body>
+
+<div id="card">
+    <h1 id="question">Before I ask something important... 💭</h1>
+    <div id="buttons">
+        <button onclick="nextStep()">Okay 👀</button>
+    </div>
+
+    <div id="proposalText"></div>
+    <button id="yesBtn" onclick="accepted()">Yes 💖</button>
+    <button id="nextBtn" onclick="goNext()">Enter The Surprise 💞</button>
+</div>
+
+<script>
+
+let step=0;
+const question=document.getElementById("question");
+const buttons=document.getElementById("buttons");
+const proposalText=document.getElementById("proposalText");
+const yesBtn=document.getElementById("yesBtn");
+const nextBtn=document.getElementById("nextBtn");
+
+/* Floating Hearts */
+setInterval(()=>{
+    const heart=document.createElement("div");
+    heart.className="heart";
+    heart.innerHTML="💗";
+    heart.style.left=Math.random()*100+"vw";
+    heart.style.fontSize=(Math.random()*20+15)+"px";
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),8000);
+},500);
+
+function nextStep(){
+    step++;
+
+    if(step===1){
+        question.innerHTML="Do you believe in forever? 🌙";
+        buttons.innerHTML=`
+            <button onclick="nextStep()">Yes 💖</button>
+            <button onclick="nextStep()">With You, Always 😌</button>
+        `;
+    }
+
+    else if(step===2){
+        question.innerHTML="If distance disappears... what remains? ✨";
+        buttons.innerHTML=`
+            <button onclick="nextStep()">Us 💞</button>
+            <button onclick="nextStep()">Only Love 💗</button>
+        `;
+    }
+
+    else if(step===3){
+        question.innerHTML="";
+        buttons.innerHTML="";
+        showProposal();
+    }
+}
+
+function showProposal(){
+    proposalText.innerHTML="Will You Be Mine Forever? 💍💗";
+    gsap.to(proposalText,{opacity:1,duration:1});
+    gsap.to(yesBtn,{opacity:1,duration:1,delay:1});
+}
+
+function accepted(){
+
+    yesBtn.style.display="none";
+
+    proposalText.innerHTML="You just made me the happiest person alive 💖";
+    gsap.fromTo("#card",
+        {boxShadow:"0 0 40px rgba(255,0,128,0.3)"},
+        {boxShadow:"0 0 80px rgba(255,0,128,0.9)",duration:1,yoyo:true,repeat:3}
+    );
+
+    // Show surprise button after 7 seconds
+    setTimeout(()=>{
+        gsap.to(nextBtn,{opacity:1,duration:1});
+    },7000);
+}
+
+function goNext(){
+    window.location.href="surprise.html";
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Propose Day 💍</title>
+
+<style>
+body{
+    margin:0;
+    font-family:'Segoe UI',sans-serif;
+    overflow:hidden;
+    background: radial-gradient(circle at center, #1a001a, #000);
+    color:white;
+    text-align:center;
+}
+
+/* FLOATING VALENTINE HEARTS BACKGROUND */
+.floating{
+    position:fixed;
+    top:-10vh;
+    font-size:20px;
+    animation: floatDown linear infinite;
+    opacity:0.8;
+}
+
+@keyframes floatDown{
+    to{
+        transform: translateY(110vh) rotate(360deg);
+    }
+}
+
+/* SCREEN 1 */
+#screen1{ height:100vh; }
+
+h1{
+    margin-top:80px;
+    font-size:3rem;
+    color:#ff66b2;
+    text-shadow:0 0 20px #ff1a75;
+}
+
+.line{
+    margin-top:15px;
+    font-size:1.2rem;
+    opacity:0;
+    transition:2s;
+}
+
+.proposeBtn{
+    margin-top:70px;
+    padding:16px 40px;
+    font-size:1.2rem;
+    border:none;
+    border-radius:40px;
+    cursor:pointer;
+    background:linear-gradient(45deg,#ff1a75,#ff66b2);
+    color:white;
+    box-shadow:0 0 20px #ff66b2;
+}
+
+/* SCREEN 2 */
+#screen2{
+    display:none;
+    height:100vh;
+    background: linear-gradient(135deg,#ff758c,#ff7eb3);
+    animation:fadeIn 2s forwards;
+    padding-top:120px;
+    color:#5a001f;
+}
+
+.choiceBtn{
+    padding:14px 35px;
+    font-size:1.1rem;
+    border:none;
+    border-radius:30px;
+    margin:40px 15px;
+    cursor:pointer;
+    position:relative;
+}
+
+#yesLove{ background:#ff1a75; color:white; }
+#noLove{ background:#333; color:white; }
+
+/* FINAL YES SCREEN */
+#finalScreen{
+    display:none;
+    height:100vh;
+    background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    color:#5a001f;
+}
+
+#finalScreen h1{
+    font-size:3.2rem;
+    color:#d1005c;
+    text-shadow: 0 0 8px white, 0 0 15px #ff4d88;
+}
+
+#finalScreen p{
+    font-size:1.4rem;
+    width:70%;
+}
+
+.surpriseBtn{
+    margin-top:40px;
+    padding:14px 40px;
+    font-size:1.2rem;
+    border:none;
+    border-radius:30px;
+    cursor:pointer;
+    background:linear-gradient(45deg,#ff1a75,#ff4da6);
+    color:white;
+    box-shadow:0 0 15px #ff4da6;
+}
+
+@keyframes fadeIn{
+    from{opacity:0}
+    to{opacity:1}
+}
+</style>
+</head>
+
+<body>
+
+<!-- SCREEN 1 -->
+<div id="screen1">
+    <h1>Today I Ask You Something Special 💍</h1>
+    <div class="line" id="line1">Some people come as a blessing…</div>
+    <div class="line" id="line2">But you came like destiny ✨</div>
+    <button class="proposeBtn" onclick="startProposal()">Click to See My Heart ❤️</button>
+</div>
+
+<!-- SCREEN 2 -->
+<div id="screen2">
+    <h2>Will You Be Mine Forever? 💖</h2>
+    <p>Every moment with you feels magical. So today I ask for all tomorrows with you 🌸</p>
+    <button class="choiceBtn" id="yesLove" onclick="finalYes()">YES 💍</button>
+    <button class="choiceBtn" id="noLove" onclick="runAway()">NO 🙈</button>
+</div>
+
+<!-- FINAL SCREEN -->
+<div id="finalScreen">
+    <h1>She Said YES 💍💖</h1>
+    <p>
+        This is the beginning of our forever.  
+        Every heartbeat from today whispers your name.  
+        Thank you for choosing us. 🌸
+    </p>
+    <button class="surpriseBtn" onclick="openSurprise()">🎁 One More Surprise</button>
+</div>
+
+<script>
+/* TEXT FADE */
+setTimeout(()=>{line1.style.opacity=1},1000);
+setTimeout(()=>{line2.style.opacity=1},2500);
+
+/* FLOATING VALENTINE BACKGROUND */
+for(let i=0;i<40;i++){
+    let f=document.createElement("div");
+    f.className="floating";
+    f.innerHTML="💖";
+    f.style.left=Math.random()*100+"vw";
+    f.style.animationDuration=(5+Math.random()*5)+"s";
+    f.style.fontSize=(15+Math.random()*25)+"px";
+    document.body.appendChild(f);
+}
+
+/* SCREEN CHANGES */
+function startProposal(){
+    screen1.style.display="none";
+    screen2.style.display="block";
+}
+
+function runAway(){
+    let btn=noLove;
+    btn.style.left=Math.random()*60+"vw";
+    btn.style.top=Math.random()*50+"vh";
+}
+
+function finalYes(){
+    screen2.style.display="none";
+    finalScreen.style.display="flex";
+}
+
+function openSurprise(){
+    window.location.href="surprise.html";
+}
+</script>
+
+</body>
+</html>

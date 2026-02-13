@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Hug Day 🤍</title>
+
+<style>
+body{
+    margin:0;
+    overflow:hidden;
+    font-family:Segoe UI, sans-serif;
+    color:white;
+    text-align:center;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    background: radial-gradient(circle at center, #111, #000);
+    animation: backgroundPulse 6s infinite alternate;
+}
+
+/* Background dim-light pulse */
+@keyframes backgroundPulse{
+    0%{background: radial-gradient(circle at center, #111, #000);}
+    100%{background: radial-gradient(circle at center, #1f1f1f, #000);}
+}
+
+/* Floating particles */
+.particle{
+    position:absolute;
+    width:6px;
+    height:6px;
+    background:rgba(255,255,255,0.5);
+    border-radius:50%;
+    animation: floatUp linear infinite;
+}
+
+@keyframes floatUp{
+    from{
+        transform:translateY(100vh) scale(0.5);
+        opacity:0;
+    }
+    30%{opacity:0.6;}
+    to{
+        transform:translateY(-10vh) scale(1);
+        opacity:0;
+    }
+}
+
+/* Text fade */
+.fade{
+    opacity:0;
+    transition:opacity 1.5s ease;
+}
+
+.show{
+    opacity:1;
+}
+
+/* Heart animation */
+.heart{
+    font-size:90px;
+    animation:beat 1.4s infinite;
+}
+
+@keyframes beat{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.15);}
+    100%{transform:scale(1);}
+}
+
+button{
+    padding:10px 20px;
+    border:none;
+    border-radius:25px;
+    background:#ff4da6;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+    margin-top:25px;
+    transition:0.3s;
+}
+
+button:hover{
+    transform:scale(1.1);
+    box-shadow:0 0 20px #ff4da6;
+}
+
+#surprise{
+    position:fixed;
+    bottom:25px;
+    right:25px;
+    display:none;
+}
+</style>
+</head>
+
+<body>
+
+<h1 id="text" class="fade">Close your eyes for 3 seconds…</h1>
+<div id="heartContainer"></div>
+<button id="restartBtn" onclick="restart()" style="display:none;">Hug Me Again</button>
+<button id="surprise" onclick="goToSong()">🎵 Surprise</button>
+
+<script>
+
+let text = document.getElementById("text");
+let heartContainer = document.getElementById("heartContainer");
+let restartBtn = document.getElementById("restartBtn");
+let surpriseBtn = document.getElementById("surprise");
+
+/* Create floating particles */
+function createParticles(){
+    for(let i=0;i<40;i++){
+        let p=document.createElement("div");
+        p.className="particle";
+        p.style.left=Math.random()*100+"vw";
+        p.style.animationDuration=(5+Math.random()*5)+"s";
+        p.style.animationDelay=Math.random()*5+"s";
+        document.body.appendChild(p);
+    }
+}
+createParticles();
+
+function startSequence(){
+
+    text.classList.add("show");
+
+    setTimeout(()=>{
+        text.innerText = "If I were standing in front of you right now…";
+    },4000);
+
+    setTimeout(()=>{
+        text.innerText = "I would pull you close…";
+        heartContainer.innerHTML = "<div class='heart'>🤍</div><h2>And never let go.</h2>";
+    },8000);
+
+    setTimeout(()=>{
+        text.innerText = "Distance can't stop this hug.";
+        heartContainer.innerHTML = "<h2>Happy Hug Day, my Hennah Darling<3</h2>";
+        restartBtn.style.display="inline-block";
+    },13000);
+
+    setTimeout(()=>{
+        surpriseBtn.style.display="block";
+    },17000);
+}
+
+function restart(){
+    location.reload();
+}
+
+function goToSong(){
+    window.location.href="song.html";
+}
+
+startSequence();
+
+</script>
+
+</body>
+</html>
